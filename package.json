@@ -19,7 +19,8 @@
 	"devDependencies": {
 		"concat-stream": "^1.6.0",
 		"mdns": "^2.3.3",
-		"pdfkit": "^0.8.3"
+		"pdfkit": "^0.8.3",
+      "@types/node": "^24.1.0"
 	},
 	"main": "ipp.js",
 	"engines": {
