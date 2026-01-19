@@ -11,7 +11,7 @@ export interface ParsedBuffer {
 }
 
 export function parse(buf: Buffer): ParsedBuffer;
-export function serialize(msg: object): Buffer;
+export function serialize(msg: object, options: { ignoreUnknown?: boolean }): Buffer;
 export function request(
     opts: string | UrlWithStringQuery,
     buffer: Buffer,
