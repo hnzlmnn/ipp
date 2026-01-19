@@ -26,61 +26,86 @@ export const tags: object;
 export const operations: object;
 export const statusCodes: object;
 
+
+export type IppRequest =
+    | FullRequest
+    | SimpleRequest
+    | PrintJobRequest
+    | PrintURIRequest
+    | ValidateJobRequest
+    | CreateJobRequest
+    | GetPrinterAttributesRequest
+    | GetJobsRequest
+    | SendDocumentRequest
+    | SendURIRequest
+    | CancelReleaseJobRequest
+    | GetJobAttributesRequest
+    | HoldRestartJobRequest;
+
+export type IppResponse =
+    | FullResponse
+    | SimpleResponse
+    | PrintJobResponse
+    | GetPrinterAttributesResponse
+    | GetJobsResponse
+    | SendDocumentResponse
+    | GetJobAttributesResponse;
+
+export type IppOperation =
+    | PrinterOpertaion
+    | "Print-Job"
+    | "Print-URI"
+    | "Validate-Job"
+    | "Create-Job"
+    | "Get-Printer-Attributes"
+    | "Get-Jobs"
+    | "Pause-Printer"
+    | "Resume-Printer"
+    | "Purge-Jobs"
+    | "Send-Document"
+    | "Send-URI"
+    | "Cancel-Job"
+    | "Release-Job"
+    | "Get-Job-Attributes"
+    | "Hold-Job"
+    | "Restart-Job";
+
+export type PrinterAttributeScope = RequestedPrinterAttributeGroups | keyof PrinterDescription;
+export type PrinterAttributeScopes = PrinterAttributeScope[];
+
+export interface IppOperationMap {
+    "Print-Job": { req: PrintJobRequest; res: PrintJobResponse };
+    "Print-URI": { req: PrintURIRequest; res: PrintJobResponse };
+    "Validate-Job": { req: ValidateJobRequest; res: SimpleResponse };
+    "Create-Job": { req: CreateJobRequest; res: SimpleResponse };
+    "Get-Printer-Attributes": {
+        req: GetPrinterAttributesRequest;
+        res: GetPrinterAttributesResponse;
+    };
+    "Get-Jobs": { req: GetJobsRequest; res: GetJobsResponse };
+    "Pause-Printer": { req: SimpleRequest; res: SimpleResponse };
+    "Resume-Printer": { req: SimpleRequest; res: SimpleResponse };
+    "Purge-Jobs": { req: SimpleRequest; res: SimpleResponse };
+    "Send-Document": { req: SendDocumentRequest; res: SendDocumentResponse };
+    "Send-URI": { req: SendURIRequest; res: SimpleResponse };
+    "Cancel-Job": { req: CancelReleaseJobRequest; res: SimpleResponse };
+    "Release-Job": { req: CancelReleaseJobRequest; res: SimpleResponse };
+    "Get-Job-Attributes": {
+        req: GetJobAttributesRequest;
+        res: GetJobAttributesResponse;
+    };
+    "Hold-Job": { req: HoldRestartJobRequest; res: SimpleResponse };
+    "Restart-Job": { req: HoldRestartJobRequest; res: SimpleResponse };
+}
+
 export class Printer {
     constructor(url: string, options?: PrinterOptions);
 
-    execute(
-        operation: PrinterOpertaion,
-        message?: FullRequest,
-    ): Promise<FullResponse>;
-    execute(
-        operation: "Print-Job",
-        message: PrintJobRequest,
-    ): Promise<PrintJobResponse>;
-    execute(
-        operation: "Print-URI",
-        message: PrintURIRequest,
-    ): Promise<PrintJobResponse>;
-    execute(
-        operation: "Validate-Job",
-        message: ValidateJobRequest,
-    ): Promise<SimpleResponse>;
-    execute(
-        operation: "Create-Job",
-        message: CreateJobRequest,
-    ): Promise<SimpleResponse>;
-    execute(
-        operation: "Get-Printer-Attributes",
-        message: GetPrinterAttributesRequest,
-    ): Promise<GetPrinterAttributesResponse>;
-    execute(
-        operation: "Get-Jobs",
-        message: GetJobsRequest,
-    ): Promise<GetJobsResponse>;
-    execute(
-        operation: "Pause-Printer" | "Resume-Printer" | "Purge-Jobs",
-        message: SimpleRequest,
-    ): Promise<SimpleResponse>;
-    execute(
-        operation: "Send-Document",
-        message: SendDocumentRequest,
-    ): Promise<SendDocumentResponse>;
-    execute(
-        operation: "Send-URI",
-        message: SendURIRequest,
-    ): Promise<SimpleResponse>;
-    execute(
-        operation: "Cancel-Job" | "Release-Job",
-        message: CancelReleaseJobRequest,
-    ): Promise<SimpleResponse>;
-    execute(
-        operation: "Get-Job-Attributes",
-        message: GetJobAttributesRequest,
-    ): Promise<GetJobAttributesResponse>;
-    execute(
-        operation: "Hold-Job" | "Restart-Job",
-        message: HoldRestartJobRequest,
-    ): Promise<SimpleResponse>;
+
+    execute<Op extends keyof IppOperationMap>(
+        operation: Op,
+        msg: IppOperationMap[Op]["req"],
+    ): Promise<IppOperationMap[Op]["res"]>;
 }
 
 export interface PrinterOptions {
@@ -240,7 +265,7 @@ export interface GetPrinterAttributesRequest {
         "requesting-user-name": string;
         "attributes-natural-language"?: string | undefined;
         "document-format"?: MimeMediaType | undefined;
-        "requested-attributes"?: Array<RequestedPrinterAttributeGroups | keyof PrinterDescription> | undefined;
+        "requested-attributes"?: PrinterAttributeScopes | undefined;
         "printer-uri"?: string | undefined;
     };
 }
