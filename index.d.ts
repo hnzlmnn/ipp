@@ -32,68 +32,55 @@ export class Printer {
     execute(
         operation: PrinterOpertaion,
         message?: FullRequest,
-        callback?: (error: Error, response: FullResponse) => void,
-    ): void;
+    ): Promise<FullResponse>;
     execute(
         operation: "Print-Job",
         message: PrintJobRequest,
-        callback?: (error: Error, response: PrintJobResponse) => void,
-    ): void;
+    ): Promise<PrintJobResponse>;
     execute(
         operation: "Print-URI",
         message: PrintURIRequest,
-        callback?: (error: Error, response: PrintJobResponse) => void,
-    ): void;
+    ): Promise<PrintJobResponse>;
     execute(
         operation: "Validate-Job",
         message: ValidateJobRequest,
-        callback?: (error: Error, response: SimpleResponse) => void,
-    ): void;
+    ): Promise<SimpleResponse>;
     execute(
         operation: "Create-Job",
         message: CreateJobRequest,
-        callback?: (error: Error, response: SimpleResponse) => void,
-    ): void;
+    ): Promise<SimpleResponse>;
     execute(
         operation: "Get-Printer-Attributes",
         message: GetPrinterAttributesRequest,
-        callback?: (error: Error, response: GetPrinterAttributesResponse) => void,
-    ): void;
+    ): Promise<GetPrinterAttributesResponse>;
     execute(
         operation: "Get-Jobs",
         message: GetJobsRequest,
-        callback?: (error: Error, response: GetJobsResponse) => void,
-    ): void;
+    ): Promise<GetJobsResponse>;
     execute(
         operation: "Pause-Printer" | "Resume-Printer" | "Purge-Jobs",
         message: SimpleRequest,
-        callback?: (error: Error, response: SimpleResponse) => void,
-    ): void;
+    ): Promise<SimpleResponse>;
     execute(
         operation: "Send-Document",
         message: SendDocumentRequest,
-        callback?: (error: Error, response: SendDocumentResponse) => void,
-    ): void;
+    ): Promise<SendDocumentResponse>;
     execute(
         operation: "Send-URI",
         message: SendURIRequest,
-        callback?: (error: Error, response: SimpleResponse) => void,
-    ): void;
+    ): Promise<SimpleResponse>;
     execute(
         operation: "Cancel-Job" | "Release-Job",
         message: CancelReleaseJobRequest,
-        callback?: (error: Error, response: SimpleResponse) => void,
-    ): void;
+    ): Promise<SimpleResponse>;
     execute(
         operation: "Get-Job-Attributes",
         message: GetJobAttributesRequest,
-        callback?: (error: Error, response: GetJobAttributesResponse) => void,
-    ): void;
+    ): Promise<GetJobAttributesResponse>;
     execute(
         operation: "Hold-Job" | "Restart-Job",
         message: HoldRestartJobRequest,
-        callback?: (error: Error, response: SimpleResponse) => void,
-    ): void;
+    ): Promise<SimpleResponse>;
 }
 
 export interface PrinterOptions {
