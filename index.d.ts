@@ -25,6 +25,7 @@ export const enums: object;
 export const tags: object;
 export const operations: object;
 export const statusCodes: object;
+export const MIME_MEDIA_TYPES: MimeMediaType[];
 
 
 export type IppRequest =
