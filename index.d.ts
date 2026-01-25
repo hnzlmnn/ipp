@@ -7,7 +7,7 @@ export interface ParsedBuffer {
     operation: PrinterOperation;
     statusCode: StatusCode;
     id: number;
-    data: string;
+    data: Buffer<ArrayBuffer>;
 }
 
 export function parse(buf: Buffer): ParsedBuffer;
