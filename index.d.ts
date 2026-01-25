@@ -107,6 +107,11 @@ export class Printer {
         operation: Op,
         msg: IppOperationMap[Op]["req"],
     ): Promise<IppOperationMap[Op]["res"]>;
+
+    executeRaw<Op extends keyof IppOperationMap>(
+        operation: Op,
+        buf: Buffer<ArrayBuffer>,
+    ): Promise<IppOperationMap[Op]["res"]>;
 }
 
 export interface PrinterOptions {
