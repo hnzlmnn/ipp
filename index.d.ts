@@ -120,9 +120,9 @@ export class Printer {
 }
 
 export interface BaseRequest {
-    version: IPPVersion;
-    operation: keyof IppOperationMap;
-    id: number;
+    version?: IPPVersion;
+    operation?: keyof IppOperationMap;
+    id?: number;
 }
 
 export interface PrinterOptions {
