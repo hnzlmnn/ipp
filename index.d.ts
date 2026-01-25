@@ -3,8 +3,8 @@
 import { UrlWithStringQuery } from "url";
 
 export interface ParsedBuffer {
-    version: string;
-    operation: PrinterOpertaion;
+    version: IPPVersion;
+    operation: PrinterOperation;
     statusCode: StatusCode;
     id: number;
     data: string;
@@ -53,7 +53,7 @@ export type IppResponse =
     | GetJobAttributesResponse;
 
 export type IppOperation =
-    | PrinterOpertaion
+    | PrinterOperation
     | "Print-Job"
     | "Print-URI"
     | "Validate-Job"
@@ -119,6 +119,12 @@ export class Printer {
     ): Promise<Buffer<ArrayBuffer>>;
 }
 
+export interface BaseRequest {
+    version: IPPVersion;
+    operation: keyof IppOperationMap;
+    id: number;
+}
+
 export interface PrinterOptions {
     version?: IPPVersion | undefined;
     uri?: string | undefined;
@@ -126,7 +132,7 @@ export interface PrinterOptions {
     language?: string | undefined;
 }
 
-export interface FullRequest {
+export interface FullRequest extends BaseRequest {
     "operation-attributes-tag"?: OperationAttributes | undefined;
     "job-attributes-tag"?: JobTemplateAttributes | undefined;
     data?: Buffer | undefined;
@@ -142,7 +148,7 @@ export interface FullResponse {
     "printer-attributes-tag"?: PrinterDescription | undefined;
 }
 
-export interface SimpleRequest {
+export interface SimpleRequest extends BaseRequest  {
     "operation-attributes-tag": {
         "requesting-user-name": string;
         "attributes-charset"?: CharacterSet | undefined;
@@ -166,7 +172,7 @@ export interface SimpleResponse {
 
 // PRINT-JOB
 
-export interface PrintJobRequest {
+export interface PrintJobRequest extends BaseRequest  {
     "operation-attributes-tag": {
         "requesting-user-name": string;
         "attributes-charset"?: CharacterSet | undefined;
@@ -210,7 +216,7 @@ export interface PrintJobResponse {
 // PRINT-URI
 // Same response as PRINT-JOB
 
-export interface PrintURIRequest {
+export interface PrintURIRequest extends BaseRequest  {
     "operation-attributes-tag": {
         "attributes-charset"?: CharacterSet | undefined;
         "requesting-user-name": string;
@@ -232,7 +238,7 @@ export interface PrintURIRequest {
 
 // VALIDATE-JOB
 
-export interface ValidateJobRequest {
+export interface ValidateJobRequest extends BaseRequest  {
     "operation-attributes-tag": {
         "attributes-charset"?: CharacterSet | undefined;
         "requesting-user-name": string;
@@ -253,7 +259,7 @@ export interface ValidateJobRequest {
 
 // CREATE-JOB
 
-export interface CreateJobRequest {
+export interface CreateJobRequest extends BaseRequest  {
     "operation-attributes-tag": {
         "attributes-charset"?: CharacterSet | undefined;
         "requesting-user-name": string;
@@ -270,7 +276,7 @@ export interface CreateJobRequest {
 
 // GET-PRINTER-ATTRIBUTES
 
-export interface GetPrinterAttributesRequest {
+export interface GetPrinterAttributesRequest extends BaseRequest  {
     "operation-attributes-tag": {
         "attributes-charset"?: CharacterSet | undefined;
         "requesting-user-name": string;
@@ -297,7 +303,7 @@ export interface GetPrinterAttributesResponse {
 
 // GET-JOBS
 
-export interface GetJobsRequest {
+export interface GetJobsRequest extends BaseRequest  {
     "operation-attributes-tag": {
         "attributes-charset"?: CharacterSet | undefined;
         "attributes-natural-language"?: string | undefined;
@@ -330,7 +336,7 @@ export interface GetJobsResponse {
 
 // SEND-DOCUMENT
 
-export interface SendDocumentRequest {
+export interface SendDocumentRequest extends BaseRequest  {
     "operation-attributes-tag": {
         "attributes-charset"?: CharacterSet | undefined;
         "attributes-natural-language"?: string | undefined;
@@ -370,7 +376,7 @@ export interface SendDocumentResponse {
 
 // SEND-URI
 
-export interface SendURIRequest {
+export interface SendURIRequest extends BaseRequest  {
     "operation-attributes-tag": {
         "attributes-charset"?: CharacterSet | undefined;
         "attributes-natural-language"?: string | undefined;
@@ -389,7 +395,7 @@ export interface SendURIRequest {
 
 // CANCEL-/RELEASE-JOB
 
-export interface CancelReleaseJobRequest {
+export interface CancelReleaseJobRequest extends BaseRequest  {
     "operation-attributes-tag": {
         "attributes-charset"?: CharacterSet | undefined;
         "attributes-natural-language"?: string | undefined;
@@ -403,7 +409,7 @@ export interface CancelReleaseJobRequest {
 
 // GET-JOB-ATTRIBUTES
 
-export interface GetJobAttributesRequest {
+export interface GetJobAttributesRequest extends BaseRequest  {
     "operation-attributes-tag": {
         "attributes-charset"?: CharacterSet | undefined;
         "attributes-natural-language"?: string | undefined;
@@ -434,7 +440,7 @@ export interface GetJobAttributesResponse {
 
 // HOLD-/RESTARTJOB
 
-export interface HoldRestartJobRequest {
+export interface HoldRestartJobRequest extends BaseRequest  {
     "operation-attributes-tag": {
         "attributes-charset"?: CharacterSet | undefined;
         "attributes-natural-language"?: string | undefined;
@@ -1782,7 +1788,7 @@ export type MimeMediaType =
     | "text/x-setext"
     | "text/x-sgml";
 
-export type PrinterOpertaion =
+export type PrinterOperation =
     | "Acknowledge-Document"
     | "Acknowledge-Identify-Printer"
     | "Acknowledge-Job"
